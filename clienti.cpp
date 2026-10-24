@@ -43,6 +43,44 @@ public:
 			this->observatiiClient = nullptr;
 		}
 	}
+
+	// constructor de copiere 
+	
+	Client(const Client& copie) : idClient(++numarClienti) {
+		//this->idClient = copie.idClient;
+		this->nume = copie.nume;
+		this->bugetClient = copie.bugetClient;
+		if (copie.observatiiClient != nullptr) {
+			this->observatiiClient = new char[strlen(copie.observatiiClient) + 1];
+			strcpy(this->observatiiClient, copie.observatiiClient);
+		}
+		else {
+			this->observatiiClient = nullptr;
+			cout << " Nu exista observatii!!";
+		}
+	}
+
+	// operator egal
+	void operator=(const Client& copie) {
+
+		if (observatiiClient != nullptr) {
+			delete[] this->observatiiClient;
+			this->observatiiClient = nullptr;
+		}
+
+		if (copie.observatiiClient != nullptr) {
+			this->observatiiClient = new char[strlen(copie.observatiiClient) + 1];
+			strcpy(this->observatiiClient, copie.observatiiClient);
+		}
+		else {
+			this->observatiiClient = nullptr;
+		}
+
+
+		this->nume = copie.nume;
+		this->bugetClient = copie.bugetClient;
+		this->numarClienti = copie.numarClienti;
+	}
 	// destructor
 
 	~Client() {
@@ -80,6 +118,23 @@ void main() {
 	
 	Client* c2 = new Client(2, "Popescu Maria", 250.0f, "Nu exista observatii");
 	c2->afisareClient();
+
+	cout << "Constructorul de copiere: \n \n" << endl;
+	Client c3(*c2);
+	c2->afisareClient();
+	
+	cout << "client 4:\n\n";
+	Client c4 (3, "Avram Avramescu", 520.4f, "Doreste factura fiscala!!!!");
+	c4.afisareClient();
+
+	cout << "Client 5: \n ";
+
+	Client c5(4, "Popescu Adriana", 758.25f, "A se emite bon fiscal!");
+	c5.afisareClient();
+
+	cout << "Operatorul =:" << endl << endl;
+	c5 = c4;
+	c5.afisareClient();
 
 
 
