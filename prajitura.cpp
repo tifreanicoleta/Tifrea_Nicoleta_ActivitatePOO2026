@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 #include<stdio.h>
@@ -10,6 +10,7 @@ class Prajitura {
 private: 
 	char* denumire;
 	int nrCalorii;
+	int nrIngrediente;
 	float* gramajIngrediente;
 	bool esteVegana;
 	float pret;
@@ -22,17 +23,19 @@ public:
 	Prajitura() {
 		this->denumire = nullptr;
 		this->nrCalorii = 0;
+		this->nrIngrediente = 0;
 		this->gramajIngrediente = nullptr;
 		this->esteVegana = false;
 		this->pret = 0.0f;
+		this->nrIngrediente = 0;
 		numarPrajituri++;
 	}
 
 	// constructorul cu parametrii
 
-	Prajitura(const char* denumire, int nrCalorii, float* gramajIngrediente, bool esteVegana, float pret) {
-		if (this->denumire != nullptr) {
-			this->denumire - new char[strlen(denumire) + 1];
+	Prajitura(const char* denumire, int nrCalorii, int nrIngrediente, float* gramajIngrediente, bool esteVegana, float pret) {
+		if (denumire != nullptr) {
+			this->denumire = new char[strlen(denumire) + 1];
 			strcpy(this->denumire, denumire);
 		}
 		else {
@@ -40,15 +43,19 @@ public:
 		}
 
 		this->nrCalorii = nrCalorii;
-		if (this->gramajIngrediente != 0) {
-			this->gramajIngrediente = new float[numarPrajituri];
-			for (int i = 0; i < numarPrajituri; i++) {
-				this->gramajIngrediente = gramajIngrediente;
+		if (gramajIngrediente != nullptr && nrIngrediente >0) {
+			this->nrIngrediente = nrIngrediente;
+			this->gramajIngrediente = new float[nrIngrediente];
+			for (int i = 0; i < nrIngrediente; i++) {
+				this->gramajIngrediente[i] = gramajIngrediente[i];
 			}
 		}
 		else {
+			this->nrIngrediente = 0;
 			this->gramajIngrediente = 0;
 		}
+		this->esteVegana = esteVegana;
+		this->pret = pret;
 	}
 
 
@@ -66,19 +73,22 @@ public:
 
 		this->nrCalorii = copie.nrCalorii;
 
-		if (copie.gramajIngrediente != 0) {
-			this->gramajIngrediente = new float[numarPrajituri];
-			for (int i = 0; i < numarPrajituri; i++) {
-				this->gramajIngrediente = copie.gramajIngrediente;
+		if (copie.gramajIngrediente != nullptr && copie.nrIngrediente>0) {
+			this->nrIngrediente = nrIngrediente;
+			this->gramajIngrediente = new float[copie.nrIngrediente];
+			for (int i = 0; i < copie.nrIngrediente; i++) {
+				this->gramajIngrediente[i] = copie.gramajIngrediente[i];
 			}
 
 		}
 		else {
-			this->gramajIngrediente = 0;
+			this->gramajIngrediente = nullptr;
+			this->gramajIngrediente = nullptr;
 		}
 
 		this->esteVegana = copie.esteVegana;
 		this->pret = copie.pret;
+		numarPrajituri++;
 
 	}
 
@@ -86,40 +96,38 @@ public:
 
 	void operator=(const Prajitura& copie) {
 
-		if (this->denumire != nullptr) {
-			delete[] this->denumire;
-			this->denumire = nullptr;
-		}
-
-		if (this->gramajIngrediente = 0) {
-			delete[] this->gramajIngrediente;
-			this->gramajIngrediente = 0;
-		}
-
-		if (copie.denumire != nullptr) {
-			this->denumire = new char[strlen(copie.denumire) + 1];
-			strcpy(this->denumire, copie.denumire);
-		}
-		else {
-			this->denumire = nullptr;
-		}
-
-		this->nrCalorii = copie.nrCalorii;
-
-		if (copie.gramajIngrediente != 0) {
-			this->gramajIngrediente = new float[numarPrajituri];
-			for (int i = 0; i < numarPrajituri; i++) {
-				this->gramajIngrediente = copie.gramajIngrediente;
+		if (this != &copie) { // Evităm auto-atribuirea (p1 = p1)
+			if (this->denumire != nullptr) {
+				delete[] this->denumire;
+				this->denumire = nullptr;
+			}
+			if (this->gramajIngrediente != nullptr) { // "!=" nu "=" !
+				delete[] this->gramajIngrediente;
+				this->gramajIngrediente = nullptr;
 			}
 
-		}
-		else {
-			this->gramajIngrediente = 0;
-		}
+			if (copie.denumire != nullptr) {
+				this->denumire = new char[strlen(copie.denumire) + 1];
+				strcpy(this->denumire, copie.denumire);
+			}
 
-		this->esteVegana = copie.esteVegana;
-		this->pret = copie.pret;
+			this->nrCalorii = copie.nrCalorii;
 
+			if (copie.gramajIngrediente != nullptr && copie.nrIngrediente > 0) {
+				this->nrIngrediente = copie.nrIngrediente;
+				this->gramajIngrediente = new float[copie.nrIngrediente];
+				for (int i = 0; i < copie.nrIngrediente; i++) {
+					this->gramajIngrediente[i] = copie.gramajIngrediente[i];
+				}
+			}
+			else {
+				this->nrIngrediente = 0;
+				this->gramajIngrediente = nullptr;
+			}
+
+			this->esteVegana = copie.esteVegana;
+			this->pret = copie.pret;
+		}
 
 
 	}
@@ -134,17 +142,57 @@ public:
 	// sa se implementeze metoda get gramaj total care sa returneze gramajul total din care este compusa prajitura
 
 	float* getGramajTotal() {
-		cout << "Gramajul total este: ";
 		return this->gramajIngrediente;
 	}
 
+	// operator << 
+	
+	friend ostream& operator<<(ostream& out, const Prajitura& p);
 
 };
 
+ostream& operator<<(ostream& out, const Prajitura& p) {
+	out << "Denumire: " << (p.denumire != nullptr ? p.denumire : "") << endl;
+		
+	out << "Nr calorii: " << p.nrCalorii << endl;
+	if (p.gramajIngrediente != nullptr && p.nrIngrediente > 0) {
+		for (int i = 0; i < p.nrIngrediente; i++) {
+			out << p.gramajIngrediente[i] << "g ";
+		}
+	}
+	else {
+		out << "Fara ingrediente" << endl;;
+	}
+	out << "Vegana: ";
+	if (p.esteVegana == true) {
+		out << "DA" << endl;
+	}
+	else {
+		out << "NU" << endl;
+	}
+	out << "Pret: " << p.pret << endl;
+	return out;
+}
 
+float Prajitura::numarPrajituri = 0;
 	
 
 void main() {
+	// constructir default
+	Prajitura prajituraClasica;
+	cout << prajituraClasica << endl;
+
+	// costructor cu parametrii
+
+	float gramajIngrediente[] = {150.5f, 200.f, 50.f};
+	Prajitura prajituraTiramisu("Tiramisu", 254, 3, gramajIngrediente, true, 25.0f);
+	cout << prajituraTiramisu << endl;
+
+
+	// operator = 
+	Prajitura p2;
+	p2 = prajituraTiramisu;
+	cout << p2;
 
 	
 }
