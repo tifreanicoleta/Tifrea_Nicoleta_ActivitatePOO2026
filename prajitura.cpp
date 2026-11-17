@@ -148,6 +148,9 @@ public:
 	// operator << 
 	
 	friend ostream& operator<<(ostream& out, const Prajitura& p);
+	
+	//operator >>
+	friend istream& operator>>(istream& in, Prajitura& p);
 
 };
 
@@ -174,6 +177,39 @@ ostream& operator<<(ostream& out, const Prajitura& p) {
 	return out;
 }
 
+
+istream& operator>>(istream& in, Prajitura& p) {
+	char buffer[100];
+	cout << "Denumire: ";
+	in >> buffer;
+	delete[] p.denumire;
+	p.denumire = new char[strlen(buffer) + 1];
+	strcpy(p.denumire, buffer);
+
+	cout << "Nr calorii: ";
+	in >> p.nrCalorii;
+
+	cout << "Nr ingrediente: ";
+	in >> p.nrIngrediente;
+	delete[] p.gramajIngrediente;
+	p.gramajIngrediente = new float[p.nrIngrediente];
+	for (int i = 0; i < p.nrIngrediente; i++) {
+		cout << "Gramaj " << i + 1 << ": ";
+		in >> p.gramajIngrediente[i];
+	}
+
+	cout << "Este vegana. Introduceti 0 daca nu este vegana, si 1 daca este: ";
+	in >> p.esteVegana;
+
+	cout << "Pret: ";
+	in >> p.pret;
+
+	return in;
+
+
+
+
+}
 float Prajitura::numarPrajituri = 0;
 	
 
@@ -193,6 +229,12 @@ void main() {
 	Prajitura p2;
 	p2 = prajituraTiramisu;
 	cout << p2;
+
+	// operator >>
+
+	Prajitura prajituraAlbinuta;
+	cin >> prajituraAlbinuta;
+	cout << prajituraAlbinuta<<endl;
 
 	
 }
