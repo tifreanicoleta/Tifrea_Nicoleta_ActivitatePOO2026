@@ -31,6 +31,8 @@ public:
 			this->numeCompanie = nullptr;
 		}
 
+		this->cifraAfaceri = cifraAfaceri;
+
 	}
 
 	// constructor de copiere
@@ -104,7 +106,24 @@ public:
 	~Companie() {
 		delete[] numeCompanie;
 	}
+
+	friend ostream& operator<<(ostream& out, const Companie& c);
 };
+
+ostream& operator<<(ostream& out, const Companie& c) {
+	out << "Companie:" << endl;
+	
+	if (c.numeCompanie != nullptr) {
+		out << "Denumire:" << c.numeCompanie <<endl;
+	}
+	else {
+		out << "Nume de companie invalid";
+	}
+
+	out << "Cifra de afaceri: " << c.cifraAfaceri << endl << endl;
+
+	return out;
+}
 
 
 
@@ -131,6 +150,13 @@ void main() {
 
 	companieGenerala.setNumeCompanie("General");
 	companieGenerala.afisare();
+
+	Companie companieDeck("Deck");
+	cout << companieDeck << endl;
+
+	Companie companieBitwire("Bitwire SRL");
+	cout << companieBitwire<<endl<<endl;
+	
 
 
 
