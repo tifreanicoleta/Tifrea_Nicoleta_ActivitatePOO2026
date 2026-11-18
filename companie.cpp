@@ -46,7 +46,7 @@ public:
 			this->numeCompanie = nullptr;
 		}
 
-		this->cifraAfaceri = cifraAfaceri;
+		this->cifraAfaceri = copie.cifraAfaceri;
 	}
 	
 	// operator egal
@@ -108,6 +108,7 @@ public:
 	}
 
 	friend ostream& operator<<(ostream& out, const Companie& c);
+	friend istream& operator>>(istream& in, Companie& c);
 };
 
 ostream& operator<<(ostream& out, const Companie& c) {
@@ -123,6 +124,20 @@ ostream& operator<<(ostream& out, const Companie& c) {
 	out << "Cifra de afaceri: " << c.cifraAfaceri << endl << endl;
 
 	return out;
+}
+
+istream& operator>>(istream& in, Companie& c) {
+	char buffer[100];
+	cout << "Nume companie:";
+	in >> buffer;
+	delete c.numeCompanie;
+	c.numeCompanie = new char[strlen(buffer) + 1];
+	strcpy(c.numeCompanie, buffer);
+
+	cout << "Cifra afaceri: ";
+	in >> c.cifraAfaceri;
+
+	return in;
 }
 
 
@@ -157,6 +172,9 @@ void main() {
 	Companie companieBitwire("Bitwire SRL");
 	cout << companieBitwire<<endl<<endl;
 	
+	Companie companieCuratenie;
+	cin >> companieCuratenie;
+	cout << companieCuratenie;
 
 
 
